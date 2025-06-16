@@ -1,0 +1,68 @@
+.display-2 {
+    font-family:'Franklin Gothic';
+    text-align: center;
+    font-size: 5rem;
+    font-weight: bold;
+    color: #081f36;
+    text-transform: capitalize;
+    letter-spacing: 2px;
+
+}
+
+.display-6 {
+    font-family:'Franklin Gothic';
+    text-align: center;
+    font-size: 2rem;
+    color: #081f36;
+    text-transform: capitalize;
+    letter-spacing: 2px;
+
+}
+.img {
+    justify-content: center;
+}
+.mb-0 {
+    text-align: center;
+    font-weight: bold;
+}
+
+.cleave_quality {
+    font-family: 'Franklin Gothic';
+    text-align: center;
+    color: #081f36;
+    font-size: x-large;
+    animation: fade 3s linear;
+    font-weight: bold;
+    padding-top: 2em;
+}
+
+@keyframes fade {
+    0% {opacity: 0}
+    100% {opacity: 1}
+}
+
+.footer {
+    padding-top: 3em;
+}
+#thorlink {
+    color:black;
+}
+
+.btn-primary {
+    background-color: rgb(189, 17, 17);
+    width:40%;
+    border-color: rgb(189, 17, 17);
+
+}
+
+.form-check-input-tearing {
+    text-indent: 0.1em;
+}
+#submit {
+    background-color: rgb(189, 17, 17);
+    border-color: rgb(189, 17, 17);
+}
+#cancel {
+    background-color: rgb(189, 17, 17);
+    border-color:rgb(189, 17, 17);
+}
