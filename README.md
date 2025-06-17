@@ -1,101 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>LDC Cleave Classifier & Tension Predictor</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light text-dark">
+# 🧪 LDC Cleave Classifier & Tension Predictor
 
-  <div class="container my-5">
-    <h1 class="display-4 text-center">LDC Cleave Classifier & Tension Predictor</h1>
-    <p class="lead text-center">An AI-powered web app for analyzing fiber cleaves and predicting optimal tension settings.</p>
+An AI-powered web app for analyzing fiber cleaves and predicting optimal tension settings to improve cleave quality.
 
-    <hr>
+---
 
-    <section>
-      <h2> Project Overview</h2>
-      <p>
-        This app allows fiber optics technicians to upload cleave images from the <strong>THORLABS LDC400</strong> system, classify them as <strong>good</strong> or <strong>bad</strong>, and—if necessary—predict the <strong>optimal tension</strong> to achieve a better cleave.
-      </p>
-    </section>
+## 🌐 Project Overview
 
-    <section>
-      <h2> How It Works</h2>
-      <ul>
-        <li>Upload a cleave image</li>
-        <li>Enter cleave metadata: tension, angle, misting, etc.</li>
-        <li>The app classifies the cleave using a CNN model</li>
-        <li>If bad, a regression model estimates a better tension</li>
-        <li>Results are shown instantly on screen</li>
-      </ul>
-    </section>
+This web application allows fiber optics technicians to upload cleave images from the **THORLABS LDC400** system. It performs two main tasks:
 
-    <section>
-      <h2> Features</h2>
-      <ul>
-        <li><strong>Deep learning classification</strong> using MobileNetV2</li>
-        <li><strong>Regression prediction</strong> of optimal tension</li>
-        <li>Automatic image preprocessing</li>
-        <li>Secure form input (CSRF-protected)</li>
-        <li>Bootstrap-based responsive UI</li>
-      </ul>
-    </section>
+1. ✅ **Classifies** the cleave as either **good** or **bad** using a CNN model.
+2. 🔧 If the cleave is bad, it uses a **regression model** to predict the optimal **tension value** to improve the result.
 
-    <section>
-      <h2> What You Can Do</h2>
-      <table class="table table-bordered">
-        <thead>
-          <tr><th>Action</th><th>Description</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Upload an image</td><td>Submit a cleave photo directly from your FCA</td></tr>
-          <tr><td>Input cleave data</td><td>Provide tension, angle, misting, etc. via form</td></tr>
-          <tr><td>Get immediate feedback</td><td>Know if the cleave was good or bad</td></tr>
-          <tr><td>Predict tension</td><td>Get a recommended cleave tension for retrying failed cleaves</td></tr>
-        </tbody>
-      </table>
-    </section>
+The app is designed to be intuitive, fast, and useful in real lab settings.
 
-    <section>
-      <h2>🛠 Tech Stack</h2>
-      <ul>
-        <li>Flask (Python)</li>
-        <li>TensorFlow / Keras</li>
-        <li>Keras Tuner</li>
-        <li>Bootstrap 5</li>
-        <li>WTForms</li>
-        <li>Pillow + NumPy</li>
-        <li>dotenv + joblib</li>
-      </ul>
-    </section>
+---
 
-    <section>
-      <h2>📸 Demo Screenshot</h2>
-      <p><em>(Insert a screenshot or GIF of your app in action here)</em></p>
-    </section>
+## 🧠 How It Works
 
-    <section>
-      <h2> How to Launch</h2>
-      <ol>
-        <li>Clone the repository</li>
-        <li>Create a <code>.env</code> file with your model/scaler paths</li>
-        <li>Run <code>flask run</code></li>
-        <li>Open <a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a> in your browser</li>
-      </ol>
-    </section>
+- Upload a cleave image through the browser.
+- Fill in metadata: cleave angle, tension, misting, hackle, tearing, etc.
+- The app uses a pre-trained image+feature model to classify the cleave.
+- If the cleave is bad, the regression model recommends a better tension value.
+- Feedback is shown on-screen immediately — no downloads or retraining required.
 
-    <section>
-      <h2> Author</h2>
-      <p><strong>Chris Lombardi</strong><br>
-     Machine learning researcher<br>
-      Intern THORLABS</p>
-    </section>
+---
 
-    <footer class="text-center mt-5">
-      <p>&copy; 2025 Chris Lombardi — All rights reserved.</p>
-    </footer>
-  </div>
+## 💡 Features
 
-</body>
-</html>
+- ✅ Deep learning classification using **MobileNetV2** (transfer learning).
+- 🔁 Dual-branch architecture: one for images, one for numerical parameters.
+- 🔧 Tension prediction using a custom **regression model**.
+- 🖼️ Automatic image preprocessing (resizing, normalization).
+- 🔐 Secure form input via **Flask-WTF** with CSRF protection.
+- 🎨 Clean UI built with **Bootstrap 5**.
+
+---
+
+## 📋 What You Can Do
+
+| Action               | Description |
+|----------------------|-------------|
+| Upload an image      | Submit a cleave photo from the THORLABS FCA system |
+| Enter cleave data    | Provide angle, tension, and binary labels for misting, hackle, and tearing |
+| Get a quality result | The model tells you whether the cleave is good or bad |
+| Predict new tension  | If bad, the app suggests a better tension value for retrying |
+
+---
+
+## 🛠 Tech Stack
+
+- Flask (Python)
+- TensorFlow / Keras
+- Keras Tuner
+- Bootstrap 5
+- WTForms
+- Pillow + NumPy
+- dotenv + joblib
+
+---
+
+## 🚀 How to Launch
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/ldc-cleave-classifier.git
+   cd ldc-cleave-classifier
