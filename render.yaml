@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: cleave-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn run:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+    build:
+      pythonVersion: 3.10
