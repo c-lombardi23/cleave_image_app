@@ -18,7 +18,6 @@ dotenv==0.9.9
 exceptiongroup==1.3.0
 executing==2.2.0
 fastjsonschema==2.21.1
-FiberCleaveProcessing @ git+https://github.com/c-lombardi23/ImageProcessing.git@1f0a83439402f59de22064cc12ffc695dcc1c15c
 Flask==3.1.1
 Flask-WTF==1.2.2
 flatbuffers==25.2.10
