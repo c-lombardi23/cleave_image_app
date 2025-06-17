@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, flash
+from flask import Flask, request, jsonify, render_template, flash, request
 import os
 import warnings
 from flask_bootstrap import Bootstrap5
@@ -12,33 +12,34 @@ from werkzeug.utils import secure_filename
 import joblib as jb
 from PIL import Image
 import numpy as np
+from dotenv import load_dotenv
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 warnings.filterwarnings('ignore')
 import tensorflow as tf
 
+load_dotenv()
+
 app = Flask(__name__)
-cnn_model_path = "C:\\Users\\clombardi\\125pm_best_model.keras"
-mlp_model_path = "C:\\Users\clombardi\\125pm_best_mlp_model_6_13.keras"
-scaler_path = "C:\\Users\\clombardi\\125pm_scaler.pkl"
-feature_scaler_path = "C:\\Users\\clombardi\\mlp_feature_scaler_6_13.pkl"
-tension_scaler_path = "C:\\Users\\clombardi\\mlp_tension_scaler_6_13.pkl"
+app.config["CNN_MODEL_PATH"]= os.getenv("CNN_MODEL_PATH")
+app.config["MLP_MODEL_PATH"] = os.getenv("MLP_MODEL_PATH")
+app.config["SCALER_PATH"] = os.getenv("SCALER_PATH")
+app.config["FEATURE_SCALER_PATH"] = os.getenv("FEATURE_SCALER_PATH")
+app.config["TENSION_SCALER_PATH"] = os.getenv("TENSION_SCALER_PATH")
+app.secret_key = os.getenv("SECRET_KEY")
 
 app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'uploads')
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
-foo = secrets.token_urlsafe(16)
-app.secret_key = foo
-
 bootstrap = Bootstrap5(app)
 csrf = CSRFProtect(app)
 
-cnn_model = tf.keras.models.load_model(cnn_model_path)
-mlp_model = tf.keras.models.load_model(mlp_model_path)
-scaler = jb.load(scaler_path)
-feature_scaler = jb.load(feature_scaler_path)
-tension_scaler = jb.load(tension_scaler_path)
+cnn_model = tf.keras.models.load_model(app.config["CNN_MODEL_PATH"])
+mlp_model = tf.keras.models.load_model(app.config["MLP_MODEL_PATH"])
+scaler = jb.load(app.config["SCALER_PATH"])
+feature_scaler = jb.load(app.config["FEATURE_SCALER_PATH"])
+tension_scaler = jb.load(app.config["TENSION_SCALER_PATH"])
 
 class DataForm(FlaskForm):
     image = FileField("Upload Image", validators=[DataRequired(), FileAllowed(['jpg', 'png'], 'Images Only!')])
@@ -54,7 +55,10 @@ class DataForm(FlaskForm):
 def preprocess_image(uploaded_file):
     # resize image and normalize
     try:
-        img = Image.open(uploaded_file)  
+        img = Image.open(uploaded_file)
+        if img is None:
+            flash("Invalid image uploaded.", category="error")
+            return render_template("index.html", form=DataForm())
         img = img.resize((224, 224))
         img = img.convert("RGB")  # Convert to 3 channels
         img_array = np.array(img) / 255.0
@@ -64,7 +68,7 @@ def preprocess_image(uploaded_file):
         print(f"Image preprocessing failed: {e}")
         return None
     
-def test_prediction(image, cleave_angle, cleave_tension, scribe_diamter, misting, hackle, tearing):
+def test_prediction(image, cleave_angle, cleave_tension, scribe_diameter, misting, hackle, tearing):
     '''
     Test function for generating prediction
 
@@ -86,7 +90,7 @@ def test_prediction(image, cleave_angle, cleave_tension, scribe_diamter, misting
       features = np.array([[cleave_angle, cleave_tension, scribe_diameter, misting, hackle, tearing]])
       features = scaler.transform(features)
       return features
-    features = process_features(cleave_angle, cleave_tension, scribe_diamter, misting, hackle, tearing)
+    features = process_features(cleave_angle, cleave_tension, scribe_diameter, misting, hackle, tearing)
     prediction = cnn_model.predict([image, features])
     return prediction
 
@@ -126,6 +130,8 @@ def predict_tension(image, cleave_angle, scribe_diameter, misting, hackle, teari
 @app.route('/', methods=['GET', 'POST'])
 def home():
     form = DataForm()
+    if request.method == 'POST' and not form.validate():
+        flash("Please correct the errors in the form.", category="error")
     if form.validate_on_submit():
         file = form.image.data
         filename = secure_filename(file.filename)
@@ -144,6 +150,6 @@ def home():
             flash("Good Cleave", category="cleave_quality")
         else:
             tension = predict_tension(file, cleave_angle, scribe_diameter, misting, hackle, tearing)
-            flash(f"Bad Cleave, Adjust Tension To: {tension:.0f}g", category = "cleave quality")           
+            flash(f"Bad Cleave, Adjust Tension To: {tension:.0f}g", category = "cleave_quality")           
     print(form.errors)
     return render_template("index.html", form=form)
