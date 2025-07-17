@@ -18,11 +18,15 @@ def create_routes(app):
             form.image.data.save(file_path)
             
 
-            prediction = test_prediction(file)
+            prediction, tension = test_prediction(file)
             print(prediction)
             if prediction >= 0.5:
                 flash("Good Cleave", category="cleave_quality")
             else:
-                flash("Bad Cleave", category="cleave_quality")          
+                print(tension)
+                if(tension > 0):
+                    flash("Bad Cleave - Decrease Tension", category="cleave_quality")
+                else:
+                    flash("Bad Cleave - Increase Tension", category="cleave_quality")          
         print(form.errors)
         return render_template("index.html", form=form)
