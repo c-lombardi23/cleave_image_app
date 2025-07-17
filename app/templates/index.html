@@ -28,7 +28,7 @@
     {% endwith %}
 <div class="text-center mt-5">
   <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#formModal">
-    Launch Cleave Classifier Form
+    Upload Image
   </button>
 </div>
     <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
@@ -48,74 +48,13 @@
             {{ form.image.label(class="form-label") }}
             {{ form.image(class="form-control") }}
           </div>
-          <div class="row">
-            <div class="col">
-          <div class="mb-3">
-            {{ form.fiber_type.label(class="form-label") }}
-            {{ form.fiber_type(class="form-control") }}
-          </div>
-          </div>
-          <div class="col">
-          <div class="mb-3">
-            {{ form.cleave_angle.label(class="form-label") }}
-            {{ form.cleave_angle(class="form-control") }}
-          </div>
-          </div>
-        </div>
-        <div class="row">
-        <div class="col">
-          <div class="mb-3">
-            {{ form.cleave_tension.label(class="form-label") }}
-            {{ form.cleave_tension(class="form-control") }}
-          </div>
-        </div>
-        <div class="col">
-
-          <div class="mb-3">
-            {{ form.scribe_diameter.label(class="form-label") }}
-            {{ form.scribe_diameter(class="form-control") }}
-          </div>
-        </div>
-        </div>
-        <div class="row">
-            <div class="col">
-          <div class="mb-3">
-            <label class="form-label">Misting</label><br>
-            {% for subfield in form.misting %}
-              <div class="form-check form-check-inline">
-                {{ subfield(class="form-check-input") }}
-                {{ subfield.label(class="form-check-label") }}
-              </div>
-            {% endfor %}
-          </div>
+          
             </div>
-            <div class ="col">
-          <div class="mb-3">
-            <label class="form-label">Hackle</label><br>
-            {% for subfield in form.hackle %}
-              <div class="form-check form-check-inline">
-                {{ subfield(class="form-check-input") }}
-                {{ subfield.label(class="form-check-label") }}
-              </div>
-            {% endfor %}
-          </div>
-            </div>
-            <div class="col">
-          <div class="mb-3">
-            <label class="form-label">Tearing</label><br>
-            {% for subfield in form.tearing %}
-              <div class="form-check form-check-inline">
-                {{ subfield(class="form-check-input") }}
-                {{ subfield.label(class="form-check-label") }}
-              </div>
-            {% endfor %}
-          </div>
-            </div>
-        </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-success" id="submit">Submit</button>
             <button type="button" class="btn btn-secondary" id="cancel" data-bs-dismiss="modal">Cancel</button>
           </div>
+    </div>
 
         </form>
       </div>

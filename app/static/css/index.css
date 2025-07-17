@@ -2,7 +2,7 @@
     font-family:'Franklin Gothic';
     text-align: center;
     font-size: 5rem;
-    font-weight: bold;
+    font-weight: 900;
     color: #081f36;
     text-transform: capitalize;
     letter-spacing: 2px;
@@ -50,7 +50,7 @@
 
 .btn-primary {
     background-color: rgb(189, 17, 17);
-    width:40%;
+    width:30%;
     border-color: rgb(189, 17, 17);
 
 }
