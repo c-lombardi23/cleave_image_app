@@ -69,23 +69,30 @@ The app is designed to be quick and easy for use in real lab settings.
    source myenv/Scripts/activate
    # On mac/linux
    source myenv/bin/activate
+   ```
 
 2. Clone the repository
+```bash
 
    git clone https://github.com/c-lombardi23/cleave_image_app.git
    cd cleave_image_app
    pip install -r requirements.txt
+   ```
 
 3. Create .env file
+```bash
 
-   I provided a .env.exmaple file for you to use
-   add
+   #I provided a .env.exmaple file for you to use
+   #add
    CNN_MODEL_PATH=models/Unified_classifier.keras
    SCALER_PATH=models/Unified_classifier_feature_scaler.pkl
    XGB_MODEL=models/Unified_regressor.pkl
    XGB_SCALER=models/Unified_regressor_scaler.pkl
    THRESHOLD=0.5
+   ```
 
 4. Run app
+```bash
 
    flask --app app.py run
+   ```
