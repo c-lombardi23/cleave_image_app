@@ -83,12 +83,18 @@ The app is designed to be quick and easy for use in real lab settings.
 ```bash
 
    #I provided a .env.exmaple file for you to use
-   #add
+   #copy to .env
    CNN_MODEL_PATH=models/Unified_classifier.keras
    SCALER_PATH=models/Unified_classifier_feature_scaler.pkl
    XGB_MODEL=models/Unified_regressor.pkl
    XGB_SCALER=models/Unified_regressor_scaler.pkl
+   SECRET_KEY=your_secret_key
    THRESHOLD=0.5
+   
+   #generate a secret key by running:
+   python -c "import secrets; print(secrets.token_hex(16))"
+
+   #paste the output into SECRET_KEY
    ```
 
 4. Run app
