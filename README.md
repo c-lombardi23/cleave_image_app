@@ -100,5 +100,5 @@ The app is designed to be quick and easy for use in real lab settings.
 4. Run app
 ```bash
 
-   flask --app app.py run
+   flask --app run.py run
    ```
