@@ -62,6 +62,14 @@ The app is designed to be quick and easy for use in real lab settings.
 
 1. Clone the repository:
    ```bash
+   
+   # Create virtual enviornment
+   python -m venv myenv
+   # On Windows
+   source myenv/Scripts/activate
+   # On mac/linux
+   source myenv/bin/activate
+
    git clone https://github.com/c-lombardi23/cleave_image_app.git
    cd cleave_image_app
    pip install -r requirements.txt
