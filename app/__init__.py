@@ -29,5 +29,10 @@ def create_app():
     create_routes(app)
     app.models = load_models()
     app.threshold = os.getenv("THRESHOLD")
+    cnn_model = app.models['cnn_model']
+    app.models["feature_extractor"] = tf.keras.Model(
+        inputs=cnn_model.input[0], 
+        outputs=cnn_model.get_layer("global_avg").output
+    )
 
     return app
