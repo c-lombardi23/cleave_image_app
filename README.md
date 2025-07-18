@@ -60,9 +60,9 @@ The app is designed to be quick and easy for use in real lab settings.
 
 ##  How to Launch Locally
 
-1. Clone the repository:
+1. Create virtual enviornment:
    ```bash
-   
+
    # Create virtual enviornment
    python -m venv myenv
    # On Windows
@@ -70,7 +70,22 @@ The app is designed to be quick and easy for use in real lab settings.
    # On mac/linux
    source myenv/bin/activate
 
+2. Clone the repository
+
    git clone https://github.com/c-lombardi23/cleave_image_app.git
    cd cleave_image_app
    pip install -r requirements.txt
+
+3. Create .env file
+
+   I provided a .env.exmaple file for you to use
+   add
+   CNN_MODEL_PATH=models/Unified_classifier.keras
+   SCALER_PATH=models/Unified_classifier_feature_scaler.pkl
+   XGB_MODEL=models/Unified_regressor.pkl
+   XGB_SCALER=models/Unified_regressor_scaler.pkl
+   THRESHOLD=0.5
+
+4. Run app
+
    flask --app app.py run
