@@ -6,8 +6,6 @@ import tensorflow as tf
 import xgboost
 from dotenv import load_dotenv
 from tensorflow.keras.models import Model
-from stable_baselines3 import SAC
-
 
 load_dotenv()
 
@@ -19,7 +17,6 @@ def load_models():
         "xgb_model": joblib.load(os.getenv("XGB_MODEL")),
         "scaler": joblib.load(os.getenv("SCALER_PATH")),
         "xgb_scaler": joblib.load(os.getenv("XGB_SCALER")),
-        "agent": SAC.load(os.getenv("AGENT"))
     }
 
 
