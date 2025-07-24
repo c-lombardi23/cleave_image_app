@@ -1,10 +1,11 @@
 import os
 
-from flask import flash, render_template, request
+from flask import flash, render_template, request, jsonify
 from werkzeug.utils import secure_filename
 
 from .forms import DataForm
 from .model_funcs import test_prediction
+import time
 
 
 def create_routes(app):
@@ -23,18 +24,22 @@ def create_routes(app):
             print(prediction)
             threshold = app.threshold
             if prediction >= float(threshold):
-                flash("Good Cleave", category="cleave_quality")
+                return jsonify({
+                    'status': 'GOOD',
+                    'message': "Good Cleave - No action needed"
+                })
             else:
                 print(tension)
+                time.sleep(1)
                 if tension > 0:
-                    flash(
-                        "Bad Cleave - Decrease Tension",
-                        category="cleave_quality",
-                    )
+                    return jsonify({
+                        'status': 'BAD',
+                        'message': 'Bad Cleave - Increase in Tension Suggested'
+                    })
                 else:
-                    flash(
-                        "Bad Cleave - Increase Tension",
-                        category="cleave_quality",
-                    )
+                    return jsonify({
+                        'status': 'BAD',
+                        'message': "Bad Cleave - Decrease in Tension Suggested"
+                    })
         print(form.errors)
         return render_template("index.html", form=form)

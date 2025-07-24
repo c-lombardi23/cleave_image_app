@@ -7,31 +7,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cleave Classifier</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body class="bg-light d-flex flex-column min-vh-100">
 
-    <div class="container text-center mt-6">
-    <h1 class="display-2">CLEAVE CLASSIFIER</h1>
-    <h3 class="display-6">Classify LDC Cleave Images and Predict Optimal Tension</h3>
-    <img src="https://www.thorlabs.com/images/thorlabs-logo.png" alt="thorlabs logo" style="width:20%; height:auto;">
-</div>
- <div class="flashed messages">
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="cleave_quality">
-                {% for message in messages %}
-                    {{ message }}
-                    {% endfor %}
+<main class="container py-5">
+    <div class="row justify-content-center text-center mb-5 page-header">
+    <div class="col-lg-8">
+        <h1 class="display-3 fw-bold">Cleave Classifier</h1>
+        <p class="lead text-muted mb-4">
+            An AI-powered tool to classify LDC fiber cleave images and recommend optimal tension adjustments.
+        </p>
+        <img src="https://www.thorlabs.com/images/thorlabs-logo.png" alt="Thorlabs Logo" class="img-fluid" style="max-width: 300px;">
+    </div>
+
+    <div id="upload-card" class="card shadow-sm">
+        <div class="card-body p-4 p-md-5">
+            <h2 class="card-title text-center mb-4">Analyze Your Image</h2>
+            <div class="text-center">
+              <button type="button" class="btn btn-primary btn-lg px-5" data-bs-toggle="modal" data-bs-target="#formModal">
+                <i class="bi bi-upload me-2"></i> Upload Image
+              </button>
             </div>
-        {% endif %}
-    {% endwith %}
-<div class="text-center mt-5">
-  <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#formModal">
-    Upload Image
-  </button>
+        </div>
+    </div>
+        <div id="results-area" class="d-none">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h3 class="mb-0">Analysis Results</h3>
+                </div>
+                <div class="card-body text-center">
+                    <p id="results-message" class="lead mb-0"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-    <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+</div>
+</main>
+
+
+<!-- MODAL DEFINITION -->
+<div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       
@@ -40,35 +58,109 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <div class="modal-body">
-        <form method="post" enctype="multipart/form-data">
-          {{ form.csrf_token }}
+      <!-- *** START CORRECTION *** -->
+      <form id="cleave-form" method="post" enctype="multipart/form-data">
+        <div class="modal-body">
+            {{ form.csrf_token }}
 
-          <div class="mb-3">
-            {{ form.image.label(class="form-label") }}
-            {{ form.image(class="form-control") }}
-          </div>
-          
+            <!-- Add all your form fields from your WTForms class here -->
+            <div class="mb-3">
+              {{ form.image.label(class="form-label") }}
+              {{ form.image(class="form-control") }}
             </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-success" id="submit">Submit</button>
-            <button type="button" class="btn btn-secondary" id="cancel" data-bs-dismiss="modal">Cancel</button>
-          </div>
-    </div>
+            
+            <!-- Add other fields like diameter here -->
+        </div>
 
-        </form>
-      </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success" id="submit-button">
+            <span class="submit-text"><i class="bi bi-check-circle me-2"></i>Submit</span>
+            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="btn btn-secondary" id="cancel-button" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-2"></i>Cancel
+          </button>
+        </div>
+      </form>
+
     </div>
   </div>
 </div>
-<footer class="footer text-center">
-    <div class="container">
-        <a href="https://www.thorlabs.com/navigation.cfm?guide_id=2415" id="thorlink">Thorlabs Fiber Processing</a>
-        <p>Copyright &copy; 2025. All rights reserved.</p>
-        <p>Designed by Chris Lombardi</p>
+<footer class="py-4 mt-auto bg-dark text-white-50">
+    <div class="container text-center">
+        <small id="footer-text">Designed by Chris Lombardi for Thorlabs © 2025</small>
+        <div class="mt-2">
+            <a id="thorlabs-link" href="https://www.thorlabs.com/navigation.cfm?guide_id=2415" class="text-white-50 text-decoration-none">
+                Thorlabs Fiber Processing
+            </a>
+        </div>
     </div>
 </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // --- JavaScript for AJAX Form Submission ---
+    
+    // Get references to the HTML elements
+    const cleaveForm = document.getElementById('cleave-form');
+    const submitButton = document.getElementById('submit-button');
+    const submitText = submitButton.querySelector('.submit-text');
+    const spinner = submitButton.querySelector('.spinner-border');
+    const resultsArea = document.getElementById('results-area');
+    const resultsMessage = document.getElementById('results-message');
+    const formModal = new bootstrap.Modal(document.getElementById('formModal'));
+
+    // Listen for the form's submit event
+    cleaveForm.addEventListener('submit', function (event) {
+        // Prevent the default browser page reload
+        event.preventDefault();
+
+        // --- 1. Show the loading state ---
+        submitButton.disabled = true;
+        submitText.textContent = 'Analyzing...';
+        spinner.classList.remove('d-none'); // Show the spinner
+
+        // --- 2. Send the form data to the Flask backend ---
+        const formData = new FormData(cleaveForm);
+        
+        fetch('/', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json()) // Parse the JSON response from Flask
+        .then(data => {
+            // --- 3. Handle the successful response ---
+            console.log('Success:', data);
+            
+            // Update the results message on the page
+            resultsMessage.textContent = data.message;
+            
+            // Optionally change the color based on the status
+            resultsArea.querySelector('.card').classList.remove('border-success', 'border-warning');
+            if (data.status === 'GOOD') {
+                resultsArea.querySelector('.card').classList.add('border-success');
+            } else {
+                resultsArea.querySelector('.card').classList.add('border-warning');
+            }
+
+            resultsArea.classList.remove('d-none'); // Show the results area
+            formModal.hide(); // Hide the modal
+        })
+        .catch((error) => {
+            // --- 4. Handle errors ---
+            console.error('Error:', error);
+            resultsMessage.textContent = 'An error occurred. Please try again.';
+            resultsArea.querySelector('.card').classList.add('border-danger');
+            resultsArea.classList.remove('d-none');
+        })
+        .finally(() => {
+            // --- 5. Reset the button after the request is complete ---
+            submitButton.disabled = false;
+            submitText.textContent = 'Submit';
+            spinner.classList.add('d-none'); // Hide the spinner again
+        });
+    });
+
+</script>
 </body>
 </html>
